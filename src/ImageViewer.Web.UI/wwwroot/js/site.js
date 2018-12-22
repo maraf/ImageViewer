@@ -1,5 +1,13 @@
-﻿var loadingPlaceholder = document.getElementById("spn-loading");
+﻿// globals
+var reloadLink = document.getElementById("lnk-reload");
+var contentImage = document.getElementById("img-content");
+var loadingPlaceholder = document.getElementById("spn-loading");
+var titlePlaceholder = document.getElementById("spn-title");
 
+var originalUrl = document.body.dataset['imageUrl'];
+var lastEtag = null;
+
+// sets current loading status.
 function setLoading(isLoading) {
     if (loadingPlaceholder !== null) {
         loadingPlaceholder.style.display = isLoading ? 'block' : 'none';
@@ -26,7 +34,9 @@ function loadImage() {
                 lastEtag = etag;
 
                 var bytes = new Uint8Array(arrayBuffer);
+                var date = xhr.getResponseHeader("Date");
                 contentImage.src = 'data:image/png;base64,' + encode(bytes);
+                titlePlaceholder.innerHTML = 'Taken: ' + date;
             }
         }
 
@@ -68,12 +78,6 @@ function encode(input) {
 }
 
 // initialization
-
-var reloadLink = document.getElementById("lnk-reload");
-var contentImage = document.getElementById("img-content");
-
-var originalUrl = document.body.dataset['imageUrl'];
-var lastEtag = null;
 
 reloadLink.addEventListener("click", function (e) {
     loadImage();

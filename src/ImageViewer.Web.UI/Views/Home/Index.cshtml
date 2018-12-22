@@ -17,6 +17,17 @@
     </environment>
 </head>
 <body data-image-url="@Url.Action("latest", "image")">
+    <nav class="navbar navbar-fixed-top navbar-inverse">
+        <div class="container">
+            <ul class="nav navbar-nav">
+                <li>
+                    <p class="navbar-text" id="spn-title">
+                        ImageViewer is loading...
+                    </p>
+                </li>
+            </ul>
+        </div>
+    </nav>
     <nav class="navbar navbar-inverse navbar-fixed-bottom">
         <div class="container">
             <ul class="nav navbar-nav">
@@ -38,7 +49,9 @@
         </div>
     </nav>
 
-    <img id="img-content"/>
+    <div class="content">
+        <img id="img-content" />
+    </div>
 
     <environment include="Development">
         @*<script src="~/lib/jquery/dist/jquery.js"></script>

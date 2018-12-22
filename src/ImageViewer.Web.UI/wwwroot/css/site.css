@@ -14,3 +14,7 @@ img#img-content {
 img#img-content:not([src]) {
     display: none;
 }
+
+.content {
+    margin-top: 52px;
+}
