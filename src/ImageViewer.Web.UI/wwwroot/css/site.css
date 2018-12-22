@@ -1,4 +1,8 @@
-﻿a {
+﻿body {
+    background: #111;
+}
+
+a {
     cursor: pointer;
 }
 
