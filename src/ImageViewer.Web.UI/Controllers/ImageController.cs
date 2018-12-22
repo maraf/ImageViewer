@@ -40,7 +40,7 @@ namespace ImageViewer.Web.UI.Controllers
                         return PhysicalFile(
                             targetFilePath,
                             options.ImageContentType,
-                            new FileInfo(targetFilePath).CreationTimeUtc,
+                            new FileInfo(targetFilePath).CreationTime,
                             new EntityTagHeaderValue($"\"{etag}\"")
                         );
                     }
