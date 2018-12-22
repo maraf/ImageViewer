@@ -1,5 +1,15 @@
-﻿// load new version of image
+﻿var loadingPlaceholder = document.getElementById("spn-loading");
+
+function setLoading(isLoading) {
+    if (loadingPlaceholder !== null) {
+        loadingPlaceholder.style.display = isLoading ? 'block' : 'none';
+    }
+}
+
+// load new version of image
 function loadImage() {
+    setLoading(true);
+
     var xhr = new XMLHttpRequest();
     xhr.open("GET", originalUrl, true);
     xhr.responseType = "arraybuffer";
@@ -19,6 +29,11 @@ function loadImage() {
                 contentImage.src = 'data:image/png;base64,' + encode(bytes);
             }
         }
+
+        setLoading(false);
+    };
+    xhr.onerror = function (e) {
+        alert(e);
     };
 
     xhr.send(null);
