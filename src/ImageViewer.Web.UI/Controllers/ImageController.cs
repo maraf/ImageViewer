@@ -26,10 +26,10 @@ namespace ImageViewer.Web.UI.Controllers
             string rootPath = options.RootPath;
             if (rootPath != null)
             {
-                string targetFolderPath = Directory.EnumerateDirectories(rootPath).LastOrDefault();
+                string targetFolderPath = Directory.EnumerateDirectories(rootPath).OrderBy(p => p).LastOrDefault();
                 if (targetFolderPath != null)
                 {
-                    string targetFilePath = Directory.EnumerateFiles(targetFolderPath).LastOrDefault();
+                    string targetFilePath = Directory.EnumerateFiles(targetFolderPath).OrderBy(p => p).LastOrDefault();
                     string etag = $"{Path.GetFileName(targetFolderPath)}_{Path.GetFileNameWithoutExtension(targetFilePath)}";
                     string currentEtag = Request.Headers["If-None-Match"];
                     if (etag == currentEtag)
