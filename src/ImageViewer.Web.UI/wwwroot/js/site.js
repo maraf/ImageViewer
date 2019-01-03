@@ -5,7 +5,11 @@ var loadingPlaceholder = document.getElementById("spn-loading");
 var titlePlaceholder = document.getElementById("spn-title");
 
 var originalUrl = document.body.dataset['imageUrl'];
+var loginUrl = document.body.dataset['loginUrl'];
 var lastEtag = null;
+var authenticationToken = null;
+
+var loginForm = document.getElementById("frm-login");
 
 // sets current loading status.
 function setLoading(isLoading) {
@@ -26,6 +30,10 @@ function loadImage() {
         xhr.setRequestHeader("If-None-Match", lastEtag);
     }
 
+    if (authenticationToken !== null) {
+        xhr.setRequestHeader("X-Authentication-Token", authenticationToken);
+    }
+
     xhr.onload = function () {
         if (xhr.status === 200 || xhr.status === 304) {
             var arrayBuffer = xhr.response;
@@ -42,7 +50,7 @@ function loadImage() {
             }
 
         } else if (xhr.status === 401) {
-            alert('Unauthorized!');
+            $("#dlg-login").modal('show');
         } else {
             alert('Error: ' + xhr.status + '; ' + xhr.statusTest);
         }
@@ -92,3 +100,26 @@ reloadLink.addEventListener("click", function (e) {
 });
 
 loadImage();
+
+
+loginForm.addEventListener("submit", function (e) {
+    var formData = new FormData();
+    formData.append("login", document.getElementById("dlg-login-login").value);
+    formData.append("password", document.getElementById("dlg-login-password").value);
+
+    var xhr = new XMLHttpRequest();
+
+    xhr.onload = function () {
+        var response = JSON.parse(xhr.responseText);
+        if (response.token !== null) {
+            authenticationToken = response.token;
+            $("#dlg-login").modal('hide');
+            loadImage();
+        }
+    };
+
+    xhr.open("POST", loginUrl);
+    xhr.send(formData);
+
+    e.preventDefault();
+});
