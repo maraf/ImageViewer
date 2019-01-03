@@ -23,15 +23,20 @@ namespace ImageViewer.Web.UI.Services
 
         public bool IsValid(HttpContext httpContext)
         {
+            Ensure.NotNull(httpContext, "httpContext");
+
             if (options.Value == null)
                 return true;
 
-            string token = httpContext.Request.Headers["X-Authentication-Token"];
+            string token = GetToken(httpContext);
             if (String.IsNullOrEmpty(token))
                 return false;
 
             return tokens.Contains(token);
         }
+
+        private static string GetToken(HttpContext httpContext)
+            => httpContext.Request.Headers["X-Authentication-Token"];
 
         public string Authenticate(string login, string password)
         {
@@ -48,9 +53,14 @@ namespace ImageViewer.Web.UI.Services
             return null;
         }
 
-        public void Discard(string token)
+        public void Discard(HttpContext httpContext)
         {
-            Ensure.NotNullOrEmpty(token, "token");
+            Ensure.NotNull(httpContext, "httpContext");
+
+            string token = GetToken(httpContext);
+            if (String.IsNullOrEmpty(token))
+                return;
+
             tokens.Remove(token);
         }
     }
