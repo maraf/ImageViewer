@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ImageViewer.Web.UI.Models;
+using ImageViewer.Web.UI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,6 +25,8 @@ namespace ImageViewer.Web.UI
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.Configure<StorageOptions>(Configuration.GetSection("Storage"));
+            services.Configure<AuthenticationOptions>(Configuration.GetSection("Authentication"));
+            services.AddSingleton<AuthenticationService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
