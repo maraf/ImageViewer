@@ -25,7 +25,7 @@ namespace ImageViewer.Web.UI.Services
         {
             Ensure.NotNull(httpContext, "httpContext");
 
-            if (options.Value == null)
+            if (options.Value.DefaultAccount == null)
                 return true;
 
             string token = GetToken(httpContext);
@@ -40,7 +40,7 @@ namespace ImageViewer.Web.UI.Services
 
         public string Authenticate(string login, string password)
         {
-            if (options.Value == null)
+            if (options.Value.DefaultAccount == null)
                 return null;
 
             if (options.Value.DefaultAccount.Login == login && options.Value.DefaultAccount.Password == password)

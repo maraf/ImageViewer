@@ -26,18 +26,25 @@ function loadImage() {
         xhr.setRequestHeader("If-None-Match", lastEtag);
     }
 
-    xhr.onload = function (e) {
-        var arrayBuffer = xhr.response;
-        if (arrayBuffer) {
-            var etag = xhr.getResponseHeader("ETag");
-            if (etag === null || lastEtag !== etag) {
-                lastEtag = etag;
+    xhr.onload = function () {
+        if (xhr.status === 200 || xhr.status === 304) {
+            var arrayBuffer = xhr.response;
+            if (arrayBuffer) {
+                var etag = xhr.getResponseHeader("ETag");
+                if (etag === null || lastEtag !== etag) {
+                    lastEtag = etag;
 
-                var bytes = new Uint8Array(arrayBuffer);
-                var date = xhr.getResponseHeader("Last-Modified");
-                contentImage.src = 'data:image/png;base64,' + encode(bytes);
-                titlePlaceholder.innerHTML = 'Taken: ' + date;
+                    var bytes = new Uint8Array(arrayBuffer);
+                    var date = xhr.getResponseHeader("Last-Modified");
+                    contentImage.src = 'data:image/png;base64,' + encode(bytes);
+                    titlePlaceholder.innerHTML = 'Taken: ' + date;
+                }
             }
+
+        } else if (xhr.status === 401) {
+            alert('Unauthorized!');
+        } else {
+            alert('Error: ' + xhr.status + '; ' + xhr.statusTest);
         }
 
         setLoading(false);

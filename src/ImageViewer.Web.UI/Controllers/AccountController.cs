@@ -29,6 +29,7 @@ namespace ImageViewer.Web.UI.Controllers
             return Ok(new { token });
         }
 
+        [HttpPost]
         public IActionResult Logout()
         {
             service.Discard(HttpContext);

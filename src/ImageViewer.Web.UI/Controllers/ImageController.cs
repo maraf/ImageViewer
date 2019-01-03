@@ -1,8 +1,10 @@
 ﻿using ImageViewer.Web.UI.Models;
+using ImageViewer.Web.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
+using Neptuo;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,15 +16,22 @@ namespace ImageViewer.Web.UI.Controllers
 {
     public class ImageController : Controller
     {
+        private readonly AuthenticationService authentication;
         private readonly StorageOptions options;
 
-        public ImageController(IOptions<StorageOptions> options)
+        public ImageController(AuthenticationService authentication, IOptions<StorageOptions> options)
         {
+            Ensure.NotNull(authentication, "authentication");
+            Ensure.NotNull(options, "options");
+            this.authentication = authentication;
             this.options = options.Value;
         }
 
         public IActionResult Latest()
         {
+            if (!authentication.IsValid(HttpContext))
+                return Unauthorized();
+
             string rootPath = options.RootPath;
             if (rootPath != null)
             {
