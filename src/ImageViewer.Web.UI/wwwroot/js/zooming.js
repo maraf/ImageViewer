@@ -10,7 +10,13 @@
 };
 
 Zooming.prototype._OnPinch = function (e, $target, data) {
-    this._lastScale = this._lastScale - data.previousScale + data.scale;
+    var delta = data.scale - data.previousScale;
+    if (data.scale > 1 || this._lastScale <= 1) {
+        this._lastScale += delta;
+    } else {
+        this._lastScale *= data.scale;
+    }
+
     $target.css({ 'webkitTransform': 'scale(' + this._lastScale + ',' + this._lastScale + ')' });
 };
 
