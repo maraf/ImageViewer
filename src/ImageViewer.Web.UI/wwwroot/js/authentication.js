@@ -1,21 +1,27 @@
 ﻿var Authentication = function () {
-    this._loginUrl = document.body.dataset['loginUrl'];
     this._currentToken = null;
 
     this.OnCurrentTokenChanged;
 
 
-    document.getElementById("frm-login").addEventListener("submit", this._OnFormSubmit.bind(this));
+    document.getElementById("frm-login").addEventListener("submit", this._OnLoginSubmit.bind(this));
 };
 
-Authentication.prototype._OnFormSubmit = function (e) {
-    var formData = new FormData();
-    formData.append("login", document.getElementById("dlg-login-login").value);
-    formData.append("password", document.getElementById("dlg-login-password").value);
+Authentication.prototype._OnLoginSubmit = function (e) {
+    var form = e.target;
+    var formData = new FormData(form);
 
     var xhr = new XMLHttpRequest();
+    xhr.onload = this._OnLoginCompleted.bind(this);
+    xhr.open("POST", form.action);
+    xhr.send(formData);
 
-    xhr.onload = function () {
+    e.preventDefault();
+};
+
+Authentication.prototype._OnLoginCompleted = function (e) {
+    var xhr = e.target;
+    if (xhr.status === 200) {
         var response = JSON.parse(xhr.responseText);
         if (response.token !== null) {
             this._currentToken = response.token;
@@ -25,12 +31,9 @@ Authentication.prototype._OnFormSubmit = function (e) {
                 this.OnCurrentTokenChanged();
             }
         }
-    }.bind(this);
-
-    xhr.open("POST", this._loginUrl);
-    xhr.send(formData);
-
-    e.preventDefault();
+    } else if (xhr.status === 401) {
+        this._GetErrorMessage().show();
+    }
 };
 
 Authentication.prototype.GetCurrentToken = function () {
@@ -38,6 +41,7 @@ Authentication.prototype.GetCurrentToken = function () {
 };
 
 Authentication.prototype.Show = function () {
+    this._GetErrorMessage().hide();
     this._GetModal().modal('show');
 };
 
@@ -47,4 +51,8 @@ Authentication.prototype.Hide = function () {
 
 Authentication.prototype._GetModal = function () {
     return $("#dlg-login");
+};
+
+Authentication.prototype._GetErrorMessage = function () {
+    return $("#dlg-login-error-message");
 };
