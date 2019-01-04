@@ -25,5 +25,19 @@ Zooming.prototype.OnImageChanged = function () {
     var offsetX = (screenWidth - imageWidth) / 2;
     var offsetY = (screenHeight - imageHeight) / 2;
 
-    this._image.css({ left: offsetX, top: offsetY });
+    if (offsetX > 0) {
+        this._image.css("left", offsetX);
+    } else if (offsetX <= 0) {
+        this._image.css("left", 0);
+        offsetX = Math.abs(offsetX);
+        $(document).scrollLeft(offsetX);
+    }
+
+    if (offsetY > 0) {
+        this._image.css("top", offsetY);
+    } else if (offsetY <= 0) {
+        this._image.css("top", 0);
+        offsetY = Math.abs(offsetY);
+        $(document).scrollTop(offsetY);
+    }
 };
