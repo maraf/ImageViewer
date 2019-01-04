@@ -8,6 +8,7 @@ var originalUrl = document.body.dataset['imageUrl'];
 var lastEtag = null;
 
 var authentication = new Authentication();
+var zooming = new Zooming(contentImage);
 
 // sets current loading status.
 function setLoading(isLoading) {

@@ -3,6 +3,10 @@
 
     this.OnCurrentTokenChanged;
 
+    var currentToken = localStorage.getItem("X-Authentication-Token");
+    if (currentToken !== null) {
+        this._currentToken = currentToken;
+    }
 
     var form = $("#frm-login");
     if (form.length === 1) {
