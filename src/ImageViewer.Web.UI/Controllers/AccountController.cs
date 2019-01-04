@@ -20,9 +20,9 @@ namespace ImageViewer.Web.UI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(string login, string password)
+        public IActionResult Login(string password)
         {
-            string token = service.Authenticate(login, password);
+            string token = service.Authenticate(password);
             if (String.IsNullOrEmpty(token))
                 return Unauthorized();
 

@@ -38,12 +38,12 @@ namespace ImageViewer.Web.UI.Services
         private static string GetToken(HttpContext httpContext)
             => httpContext.Request.Headers["X-Authentication-Token"];
 
-        public string Authenticate(string login, string password)
+        public string Authenticate(string password)
         {
             if (options.Value.DefaultAccount == null)
                 return null;
 
-            if (options.Value.DefaultAccount.Login == login && options.Value.DefaultAccount.Password == password)
+            if (options.Value.DefaultAccount.Password == password)
             {
                 string token = Guid.NewGuid().ToString();
                 tokens.Add(token);

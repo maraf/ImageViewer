@@ -4,7 +4,15 @@
     this.OnCurrentTokenChanged;
 
 
-    document.getElementById("frm-login").addEventListener("submit", this._OnLoginSubmit.bind(this));
+    var form = $("#frm-login");
+    if (form.length === 1) {
+        form.submit(this._OnLoginSubmit.bind(this));
+
+        var modal = this._GetModal();
+        modal.on('shown.bs.modal', function (e) {
+            modal.find("input").focus();
+        });
+    }
 };
 
 Authentication.prototype._OnLoginSubmit = function (e) {
