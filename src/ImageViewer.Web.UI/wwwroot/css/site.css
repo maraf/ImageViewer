@@ -22,3 +22,13 @@ img#img-content:not([src]) {
 .content {
     margin-top: 52px;
 }
+
+/* ------ BOOTSTRAP ---------------------------------------------------------------------------- */
+
+.navbar-right {
+    float: right !important;
+}
+
+.navbar-left {
+    float: left !important;
+}
