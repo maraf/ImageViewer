@@ -8,8 +8,11 @@ a {
 
 img#img-content {
     position: absolute;
-    margin: 52px 0;
     transform-origin: 0 0;
+}
+
+img.overlapping {
+    margin: 52px 0;
 }
 
 img#img-content:not([src]) {

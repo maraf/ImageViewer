@@ -14,10 +14,14 @@ Zooming.prototype._OnPinch = function (e, $target, data) {
     if (data.scale > 1 || this._lastScale <= 1) {
         this._lastScale += delta;
     } else {
-        this._lastScale *= data.scale;
+        this._lastScale += delta * this._lastScale;
     }
 
     $target.css({ 'webkitTransform': 'scale(' + this._lastScale + ',' + this._lastScale + ')' });
+
+
+
+    titlePlaceholder.innerHTML = "Scale: " + data.scale.toFixed(2) + "; Previous: " + data.previousScale.toFixed(2) + "; Last: " + this._lastScale.toFixed(2) + "; Delta: " + delta.toFixed(2);
 };
 
 Zooming.prototype.OnImageChanged = function () {
@@ -41,7 +45,7 @@ Zooming.prototype.OnImageChanged = function () {
     if (offsetY > 0) {
         this._image.css("top", offsetY);
     } else if (offsetY <= 0) {
-        this._image.css("top", 0);
+        this._image.css("top", 0).addClass("overlapping");
         offsetY = Math.abs(offsetY);
         $(document).scrollTop(offsetY);
     }
