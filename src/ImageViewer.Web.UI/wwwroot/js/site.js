@@ -45,7 +45,7 @@ function loadImage() {
                     var bytes = new Uint8Array(arrayBuffer);
                     var date = xhr.getResponseHeader("Last-Modified");
                     contentImage.src = 'data:image/png;base64,' + encode(bytes);
-                    titlePlaceholder.innerHTML = 'Taken: ' + date;
+                    titlePlaceholder.innerHTML = 'Taken on <strong>' + date + '</strong>';
                 }
             }
 

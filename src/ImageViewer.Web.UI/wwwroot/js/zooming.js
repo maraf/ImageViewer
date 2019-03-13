@@ -43,7 +43,7 @@ Zooming.prototype.OnImageChanged = function () {
     }
 
     if (offsetY > 0) {
-        this._image.css("top", offsetY);
+        this._image.css("top", offsetY).removeClass("overlapping");
     } else if (offsetY <= 0) {
         this._image.css("top", 0).addClass("overlapping");
         offsetY = Math.abs(offsetY);
