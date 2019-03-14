@@ -3,6 +3,8 @@ var reloadLink = document.getElementById("lnk-reload");
 var contentImage = document.getElementById("img-content");
 var loadingPlaceholder = document.getElementById("spn-loading");
 var titlePlaceholder = document.getElementById("spn-title");
+var prevButton = document.getElementById("lnk-prev");
+var nextButton = document.getElementById("lnk-next");
 
 var originalUrl = document.body.dataset['imageUrl'];
 var locale = document.body.dataset['locale'];
@@ -10,6 +12,8 @@ var lastEtag = null;
 
 var authentication = new Authentication();
 var zooming = new Zooming(contentImage);
+var imageHistory = [];
+var imageHistoryIndex = 0;
 
 // sets current loading status.
 function setLoading(isLoading) {
@@ -55,14 +59,15 @@ function loadImage() {
             var arrayBuffer = xhr.response;
             if (arrayBuffer) {
                 var etag = xhr.getResponseHeader("ETag");
-                if (etag === null || lastEtag !== etag) {
-                    lastEtag = etag;
-
+                if (etag === null || !showImageFromHistoryWithEtag(etag)) {
                     var bytes = new Uint8Array(arrayBuffer);
                     var date = formatDate(xhr.getResponseHeader("Last-Modified"));
+                    var imageSrc = 'data:image/png;base64,' + encode(bytes);
 
-                    contentImage.src = 'data:image/png;base64,' + encode(bytes);
-                    titlePlaceholder.innerHTML = 'Taken on <strong>' + date + '</strong>';
+                    lastEtag = etag;
+                    saveImage(imageSrc, date, etag);
+                    renderImage(imageSrc, date);
+                    ensurePrevNextButton();
                 }
             }
 
@@ -79,6 +84,66 @@ function loadImage() {
     };
 
     xhr.send(null);
+}
+
+function showImageFromHistoryWithEtag(etag) {
+    for (var i = imageHistory.length - 1; i >= 0; i--) {
+        if (imageHistory[i].etag === etag) {
+            if (i !== imageHistoryIndex) {
+                imageHistoryIndex = i;
+                showImageFromHistory();
+            }
+
+            ensurePrevNextButton();
+            return true;
+        }
+    }
+
+    return false;
+}
+
+function renderImage(src, date) {
+    contentImage.src = src;
+    titlePlaceholder.innerHTML = 'Taken on <strong>' + date + '</strong>';
+}
+
+function saveImage(src, date, etag) {
+    if (imageHistory.length > 10) {
+        imageHistory = imageHistory.slice(1);
+    }
+
+    imageHistory.push({ src: src, date: date, etag: etag });
+    imageHistoryIndex = imageHistory.length - 1;
+    ensurePrevNextButton();
+}
+
+function ensurePrevNextButton() {
+    prevButton.style.display = imageHistoryIndex > 0 ? '' : 'none';
+    nextButton.style.display = imageHistoryIndex < imageHistory.length - 1 ? '' : 'none';
+}
+
+function showPrevImage() {
+    if (imageHistoryIndex > 0) {
+        imageHistoryIndex--;
+        showImageFromHistory();
+    }
+
+    ensurePrevNextButton();
+}
+
+function showNextImage() {
+    if (imageHistoryIndex < imageHistory.length - 1) {
+        imageHistoryIndex++;
+        showImageFromHistory();
+    }
+
+    ensurePrevNextButton();
+}
+
+function showImageFromHistory() {
+    var image = imageHistory[imageHistoryIndex];
+    lastEtag = image.etag;
+    renderImage(image.src, image.date);
 }
 
 // public method for encoding an Uint8Array to base64
@@ -113,6 +178,16 @@ function encode(input) {
 
 reloadLink.addEventListener("click", function (e) {
     loadImage();
+    e.preventDefault();
+});
+
+prevButton.addEventListener("click", function (e) {
+    showPrevImage();
+    e.preventDefault();
+});
+
+nextButton.addEventListener("click", function (e) {
+    showNextImage();
     e.preventDefault();
 });
 
