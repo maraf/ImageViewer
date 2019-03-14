@@ -9,5 +9,6 @@ namespace ImageViewer.Web.UI.Models
     public class InstanceOptions
     {
         public string Title { get; set; }
+        public string Locale { get; set; }
     }
 }
