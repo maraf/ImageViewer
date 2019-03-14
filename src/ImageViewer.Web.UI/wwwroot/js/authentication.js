@@ -1,5 +1,6 @@
 ﻿var Authentication = function () {
     this._currentToken = null;
+    this._formSelector = "#frm-login";
 
     this.OnCurrentTokenChanged;
 
@@ -8,7 +9,7 @@
         this._currentToken = currentToken;
     }
 
-    var form = $("#frm-login");
+    var form = $(this._formSelector);
     if (form.length === 1) {
         form.submit(this._OnLoginSubmit.bind(this));
 
@@ -19,9 +20,20 @@
     }
 };
 
+Authentication.prototype._SetEnabled = function (form, isEnabled) {
+    if ("elements" in form) {
+        for (var i = 0; i < form.elements.length; i++) {
+            form.elements[i].disabled = !isEnabled;
+        }
+    }
+};
+
 Authentication.prototype._OnLoginSubmit = function (e) {
     var form = e.target;
     var formData = new FormData(form);
+
+    this._SetEnabled(form, false);
+    this._GetErrorMessage().hide();
 
     var xhr = new XMLHttpRequest();
     xhr.onload = this._OnLoginCompleted.bind(this);
@@ -32,6 +44,9 @@ Authentication.prototype._OnLoginSubmit = function (e) {
 };
 
 Authentication.prototype._OnLoginCompleted = function (e) {
+    var form = document.querySelector(this._formSelector);
+    this._SetEnabled(form, true);
+
     var xhr = e.target;
     if (xhr.status === 200) {
         var response = JSON.parse(xhr.responseText);
