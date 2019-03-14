@@ -25,6 +25,7 @@ namespace ImageViewer.Web.UI
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.Configure<StorageOptions>(Configuration.GetSection("Storage"));
+            services.Configure<InstanceOptions>(Configuration.GetSection("Instance"));
             services.Configure<AuthenticationOptions>(Configuration.GetSection("Authentication"));
             services.AddSingleton<AuthenticationService>();
         }

@@ -1,10 +1,11 @@
-﻿<!DOCTYPE html>
+﻿@inject IOptions<InstanceOptions> InstanceOptions
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>ImageViewer</title>
+    <title>@(InstanceOptions.Value.Title ?? "ImageViewer")</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
