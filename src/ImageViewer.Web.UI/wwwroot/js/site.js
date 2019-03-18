@@ -73,14 +73,18 @@ function loadImage() {
 
         } else if (xhr.status === 401) {
             authentication.Show();
+        } else if (xhr.status === 500) {
+            alert('The remote server responded with an internal error (' + xhr.status + '). Please try it again later.');
+        } else if (xhr.status === 503) {
+            alert('The remote server is not running (' + xhr.status + '). Please try it again later.');
         } else {
-            alert('Error: ' + xhr.status + '; ' + xhr.statusTest);
+            alert('An unexpected response came from the remote server (' + xhr.status + '). Please try it again later.');
         }
 
         setLoading(false);
     };
     xhr.onerror = function (e) {
-        alert(e);
+        alert('The remote server is not responding. Please check your internet connection.');
     };
 
     xhr.send(null);
