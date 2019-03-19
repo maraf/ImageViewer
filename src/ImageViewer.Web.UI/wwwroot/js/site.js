@@ -107,6 +107,8 @@ function showImageFromHistoryWithEtag(etag) {
 }
 
 function renderImage(src, date) {
+    zooming.SaveCurrentScroll();
+
     contentImage.src = src;
     titlePlaceholder.innerHTML = 'Taken on <strong>' + date + '</strong>';
 }

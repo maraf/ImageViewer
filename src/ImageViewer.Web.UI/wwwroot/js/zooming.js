@@ -1,5 +1,6 @@
 ﻿Zooming = function (image) {
     this._lastScale = 1;
+    this._scroll = null;
 
     this._image = $(image);
     this._image.bind('touchy-pinch', this._OnPinch.bind(this));
@@ -20,7 +21,6 @@ Zooming.prototype._OnPinch = function (e, $target, data) {
     $target.css({ 'webkitTransform': 'scale(' + this._lastScale + ',' + this._lastScale + ')' });
 
 
-
     titlePlaceholder.innerHTML = "Scale: " + data.scale.toFixed(2) + "; Previous: " + data.previousScale.toFixed(2) + "; Last: " + this._lastScale.toFixed(2) + "; Delta: " + delta.toFixed(2);
 };
 
@@ -38,15 +38,37 @@ Zooming.prototype.OnImageChanged = function () {
         this._image.css("left", offsetX);
     } else if (offsetX <= 0) {
         this._image.css("left", 0);
-        offsetX = Math.abs(offsetX);
-        $(document).scrollLeft(offsetX);
+        
+        if (this._scroll != null) {
+            $(document).scrollLeft(this._scroll.left);
+        } else {
+            offsetX = Math.abs(offsetX);
+            $(document).scrollLeft(offsetX);
+        }
     }
 
     if (offsetY > 0) {
         this._image.css("top", offsetY).removeClass("overlapping");
     } else if (offsetY <= 0) {
         this._image.css("top", 0).addClass("overlapping");
-        offsetY = Math.abs(offsetY);
-        $(document).scrollTop(offsetY);
+        
+        if (this._scroll != null) {
+            $(document).scrollTop(this._scroll.top);
+        } else {
+            offsetY = Math.abs(offsetY);
+            $(document).scrollTop(offsetY);
+        }
+    }
+
+    this._scroll = null;
+};
+
+Zooming.prototype.SaveCurrentScroll = function () {
+    if (this._image[0].src != '') {
+        var wnd = $(window);
+        this._scroll = { 
+            top: wnd.scrollTop(), 
+            left: wnd.scrollLeft() 
+        };
     }
 };
