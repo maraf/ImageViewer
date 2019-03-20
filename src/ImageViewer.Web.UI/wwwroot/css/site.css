@@ -12,7 +12,7 @@ img#img-content {
 }
 
 img.overlapping {
-    margin: 52px 0;
+    margin: 56px 0;
 }
 
 img#img-content:not([src]) {
