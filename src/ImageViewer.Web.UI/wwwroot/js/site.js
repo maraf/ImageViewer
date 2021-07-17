@@ -200,3 +200,7 @@ nextButton.addEventListener("click", function (e) {
 loadImage();
 
 authentication.OnCurrentTokenChanged = loadImage;
+
+let root = document.documentElement;
+root.style.setProperty('--scale', window.devicePixelRatio);
+window.addEventListener("resize", () => root.style.setProperty('--scale', window.devicePixelRatio));

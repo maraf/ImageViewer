@@ -1,9 +1,19 @@
-﻿body {
+﻿:root {
+    --scale: 1.25;
+}
+
+body {
     background: #111;
 }
 
 a {
     cursor: pointer;
+}
+
+.z100 {
+    width: calc(100vw * var(--scale));
+    transform-origin: 0% 0%;
+    transform: scale(calc(1 / var(--scale)));
 }
 
 img#img-content {
@@ -12,7 +22,7 @@ img#img-content {
 }
 
 img.overlapping {
-    margin: 56px 0;
+    margin: calc(52px * (1 / var(--scale))) 0;
 }
 
 img#img-content:not([src]) {
@@ -21,6 +31,11 @@ img#img-content:not([src]) {
 
 .content {
     margin-top: 52px;
+}
+
+.navbar-fixed-bottom {
+    top: calc(100vh - calc(65px * (1 / var(--scale))));
+    bottom: unset;
 }
 
 /* ------ BOOTSTRAP ---------------------------------------------------------------------------- */
