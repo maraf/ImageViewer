@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace ImageViewer.Web.UI.Controllers
 {
+    [Route("accounts")]
     public class AccountController : Controller
     {
         private readonly AuthenticationService service;
@@ -19,7 +20,7 @@ namespace ImageViewer.Web.UI.Controllers
             this.service = service;
         }
 
-        [HttpPost]
+        [HttpPost("login")]
         public IActionResult Login(string password)
         {
             string token = service.Authenticate(password);
@@ -29,7 +30,7 @@ namespace ImageViewer.Web.UI.Controllers
             return Ok(new { token });
         }
 
-        [HttpPost]
+        [HttpPost("logout")]
         public IActionResult Logout()
         {
             service.Discard(HttpContext);

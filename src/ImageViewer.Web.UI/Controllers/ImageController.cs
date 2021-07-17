@@ -2,7 +2,6 @@
 using ImageViewer.Web.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
 using Neptuo;
 using System;
@@ -14,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace ImageViewer.Web.UI.Controllers
 {
+    [Route("image")]
     public class ImageController : Controller
     {
         private readonly AuthenticationService authentication;
@@ -27,6 +27,7 @@ namespace ImageViewer.Web.UI.Controllers
             this.options = options.Value;
         }
 
+        [HttpGet("latest")]
         public IActionResult Latest()
         {
             if (!authentication.IsValid(HttpContext))
