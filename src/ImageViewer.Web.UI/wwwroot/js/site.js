@@ -1,5 +1,6 @@
 ﻿// globals
 var reloadLink = document.getElementById("lnk-reload");
+var liveLink = document.getElementById("lnk-live");
 var contentImage = document.getElementById("img-content");
 var loadingPlaceholder = document.getElementById("spn-loading");
 var titlePlaceholder = document.getElementById("spn-title");
@@ -186,6 +187,14 @@ reloadLink.addEventListener("click", function (e) {
     loadImage();
     e.preventDefault();
 });
+
+if (liveLink) {
+    liveLink.addEventListener("click", e => {
+        imageHistoryIndex = -1;
+        renderImage(liveLink.href, "LIVE");
+        e.preventDefault();
+    });
+}
 
 prevButton.addEventListener("click", function (e) {
     showPrevImage();

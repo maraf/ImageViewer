@@ -57,13 +57,22 @@
                     </a>
                 </li>
             </ul>
-            <ul class="nav navbar-nav navbar-center">
+            <ul class="nav navbar-nav navbar-center" style="@(!String.IsNullOrEmpty(InstanceOptions.Value.LiveUrl) ? "width: 170px;" : "")">
                 <li>
                     <a id="lnk-reload">
                         <span class="glyphicon glyphicon-refresh"></span>
                         Reload
                     </a>
                 </li>
+                @if (!String.IsNullOrEmpty(InstanceOptions.Value.LiveUrl))
+                {
+                    <li>
+                        <a id="lnk-live" href="@InstanceOptions.Value.LiveUrl">
+                            <span class="glyphicon glyphicon-fire"></span>
+                            Live
+                        </a>
+                    </li>
+                }
             </ul>
         </div>
     </nav>

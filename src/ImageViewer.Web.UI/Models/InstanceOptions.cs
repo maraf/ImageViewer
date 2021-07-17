@@ -10,5 +10,6 @@ namespace ImageViewer.Web.UI.Models
     {
         public string Title { get; set; }
         public string Locale { get; set; }
+        public string LiveUrl { get; set; }
     }
 }
